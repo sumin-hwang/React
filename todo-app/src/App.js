@@ -38,21 +38,35 @@ const App = () => {
 
   const nextId = React.useRef(4); //고윳값으로 사용될 id, ref사용해서 변수 담음 
 
-  const onInsert = React.useCallback(
-    text => {
-      const todo = {
-        id : nextId.current,
-        text,
-        checked : false,
-      };
-      setTodos(todos.concat(todo));
-      nextId.current += 1;
-    },[todos],
-  );
+  // const onInsert = React.useCallback(
+  //   text => {
+  //     const todo = {
+  //       id : nextId.current,
+  //       text,
+  //       checked : false,
+  //     };
+  //     setTodos(todos.concat(todo));
+  //     nextId.current += 1;
+  //   },[todos],
+  // );
+
+  /**useState의 함수형 update를 사용한 코드 최적화 
+   * 기존 구현한 부분에서 todos => 만 추가하면 됨, -> 두 번째 파라미터로 넣는 배열에 todos를 안넣어도 됨. 
+  */
+  const onInsert = React.useCallback(text =>{
+    const todo = {
+      id : nextId.current,
+      text,
+      checked : false,
+    };
+    setTodos(todos => todos.concat(todo));
+    nextId.current +=1;
+  })
 
   const onRemove = React.useCallback(
     id => {
-      setTodos(todos.filter(todo => todo.id !== id));
+      // setTodos(todos.filter(todo => todo.id !== id));
+      setTodos(todos => todos.filter(todo => todo.id !== id));
     },[todos],
   );
 
@@ -62,6 +76,7 @@ const App = () => {
        todos.map(todo =>
         todo.id === id ? {...todo, checked : !todo.checked} : todo,),
      );
+     
     }, [todos],
   );
   
