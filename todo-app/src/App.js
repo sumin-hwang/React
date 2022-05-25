@@ -15,10 +15,27 @@ function createBulkTodos() {
   return array;
 }
 
+//useReducer로 최적화
+function todoReducer(todos, action){
+  switch(action.type){
+    case 'INSERT' :
+      return todos.concat(action.todo);
+    case 'REMOVE' : 
+      return todos.filter(todo => todo.id !== action.id);
+    case 'TOGGLE' :
+      return todos.map(todo =>
+          todos.id === action.id ? {...todo, checked : !todo.checked} : todo,);
+    default :
+        return todos;
+  }
+}
+
 
 const App = () => {
   
-  const [todos, setTodos] = React.useState(createBulkTodos);
+  // const [todos, setTodos] = React.useState(createBulkTodos);
+
+  const [todos, dispatch] = React.useReducer(todoReducer, undefined, createBulkTodos);
   //   {
   //     id : 1,
   //     text : '리액트의 기초 알아보기',
@@ -59,25 +76,27 @@ const App = () => {
       text,
       checked : false,
     };
-    setTodos(todos => todos.concat(todo));
+    // setTodos(todos => todos.concat(todo));
+    dispatch({ type : 'INSERT', todo});
     nextId.current +=1;
-  })
+  }, [])
 
   const onRemove = React.useCallback(
     id => {
       // setTodos(todos.filter(todo => todo.id !== id));
-      setTodos(todos => todos.filter(todo => todo.id !== id));
-    },[todos],
+      // setTodos(todos => todos.filter(todo => todo.id !== id));
+      dispatch({type : 'REMOVE', id});
+    },[]
   );
 
   const onToggle = React.useCallback(
     id => {
-     setTodos(
-       todos.map(todo =>
-        todo.id === id ? {...todo, checked : !todo.checked} : todo,),
-     );
-     
-    }, [todos],
+    //  setTodos(
+    //    todos.map(todo =>
+    //     todo.id === id ? {...todo, checked : !todo.checked} : todo,),
+    //  );
+      dispatch({type : 'TOGGLE', id});
+    }, []
   );
   
   return(
