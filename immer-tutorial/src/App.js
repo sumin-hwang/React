@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useRef, useCallback, useState } from 'react';
+import produce from 'immer';
 
 const App = () => {
   const nextId = useRef(1);
@@ -15,10 +16,13 @@ const App = () => {
   const onChange = useCallback(
      e => {
        const {name, value} = e.target;
-       setForm({
-         ...form,
-         [name] : [value]
-       });
+       setForm(
+        //  ...form,
+        //  [name] : [value]
+        produce(form, draft => {
+          draft[name] = value;
+        })
+       );
        console.log(form);
      }, [form]
   );
@@ -32,10 +36,15 @@ const App = () => {
          username : form.username
        };
        console.log(info);
-       setData({
-        ...data,
-        array : data.array.concat(info)
-      });
+       setData(
+      //   {
+      //   ...data,
+      //   array : data.array.concat(info)
+      // }
+        produce(data, draft => {
+          draft.array.push(info);
+        })
+      );
       console.log(data);
 
       // form initialize
@@ -50,10 +59,15 @@ const App = () => {
 
   const onRemove = useCallback(
     id => {
-      setData({
-        ...data, 
-        array : data.array.filter(info => info.id !== id)
-      });
+      setData(
+      //   {
+      //   ...data, 
+      //   array : data.array.filter(info => info.id !== id)
+      // }
+        produce(data, draft => {
+          draft.array.splice(draft.array.findIndex(info => info.id === id), 1);
+        })
+      );
     }, [data]
   );
 
