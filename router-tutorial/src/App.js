@@ -7,7 +7,7 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path ="/" element={<Home />} /> {/**<Route>사용시 <Routes>로 묶어주어야 하며, component = {HOME}대신 element ={<Home />}처럼 사용 */}
+        <Route path ="/" element={<Home />} exact={true}/> {/**<Route>사용시 <Routes>로 묶어주어야 하며, component = {HOME}대신 element ={<Home />}처럼 사용 */}
         <Route path ="/about" element={<About />} />
       </Routes>
       <h1>
