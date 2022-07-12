@@ -1,33 +1,23 @@
-import React from 'react';
-import {Route, Routes, Link} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import About from './About';
+import Article from './Article';
+import Articles from './Articles';
 import Home from './Home';
 import Profile from './Profile';
+import Layout from './Layout';
 
 const App = () => {
   return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/"> HOME </Link>
-        </li>
-        <li>
-          <Link to="/about"> About</Link>
-        </li>
-        <li>
-          <Link to="profile/velopert">velopert profile</Link>
-        </li>
-        <li>
-          <Link to="profile/gildong">gildong profile</Link>
-        </li>
-      </ul>
-      <hr/>
-      <Routes>
-        <Route path ="/" element={<Home />} exact={true}/> {/**<Route>사용시 <Routes>로 묶어주어야 하며, component = {HOME}대신 element ={<Home />}처럼 사용 */}
-        <Route path ="/about" element={<About />} />
-        <Route path="/profile/:username" element={<Profile />} />
-      </Routes>
-    </div>     
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profiles/:username" element={<Profile />} />
+      </Route>
+      <Route path="/articles" element={<Articles />} >
+        <Route path="/articles/:id" element={<Article />} /> {/**중첩된 라우트는 Outlet 태그 사용으로 볼 수 있음 */}
+      </Route>
+    </Routes>
   );
 };
 
