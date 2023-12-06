@@ -1,35 +1,24 @@
-import React, {useState, Suspense} from 'react';
 import logo from './logo.svg';
 import './App.css';
-// const SplitMe = React.lazy(() => import('./SplitMe'));
-// import notify from './notify';
-import loadable from '@loadable/copmponent';
-const SplitMe = loadable(() => import('./SplitMe'), {
-  fallback : <div>loading...</div>
-});
-
+import notify from './notify';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Menu from './components/Menu';
+import RedPage from './pages/RedPage';
+import BluePage from './pages/BluePage';
 
 function App() {
-  const [visible, setVisible] = useState(false);
-
-  const onClick = () => {
-    // notify();
-    // import ('./notify').then(result => result.default());
-    setVisible(true);
-  }
-
-  
-
+  // const onClick = () => {
+  //   notify();
+  // }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className ="App-logo" alt="logo " />
-        <p onClick={onClick}> Hello React!</p>
-        {/* <Suspense fallback={<div>loading...</div>}>
-          {visible && <SplitMe/>}
-        </Suspense> */}
-        {visible && <SplitMe />}
-      </header>
+    <div>
+      <Menu />
+      <hr />
+      <Routes>
+        <Route path="/red" component={RedPage} />
+        <Route path="/blue" component={BluePage}/>
+      </Routes>
     </div>
   );
 }
